@@ -1,0 +1,4 @@
+<div class="jumbotron">
+  <h2><%= gettext "Welcome to %{name}!", name: "FORUS" %></h2>
+  <p class="lead">A forum system</p>
+</div>

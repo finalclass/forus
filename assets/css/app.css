@@ -1,0 +1,6 @@
+.logo {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.alert:empty { display: none; }
