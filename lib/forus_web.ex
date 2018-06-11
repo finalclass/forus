@@ -39,6 +39,7 @@ defmodule ForusWeb do
 
       import ForusWeb.Router.Helpers
       import ForusWeb.ErrorHelpers
+      import ForusWeb.FormsHelpers
       import ForusWeb.Gettext
     end
   end

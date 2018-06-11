@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -12,26 +12,26 @@
   </head>
 
   <body>
-    <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li>
-              <a href="">Login</a>
-            </li>
-          </ul>
-        </nav>
-        <span class="logo">FORUS</span>
-      </header>
+    <nav class="d-flex align-items-start border-bottom mb-3">
+      <%= link gettext("Forus"), to: home_path(@conn, :index), class: "navbar-brand" %>
+      <div class="col"></div>
+      <ul class="nav justify-content-end nav-pills">
+        <li class="nav-item">
+          <%= link gettext("Register"), to: accounts_user_path(@conn, :new), class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link gettext("Login"), to: accounts_session_path(@conn, :new), class: "nav-link" %>
+        </li>
+      </ul>
+    </nav>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>
 
-    </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

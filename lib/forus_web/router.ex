@@ -19,6 +19,8 @@ defmodule ForusWeb.Router do
     pipe_through :browser
     
     resources "/users", UserController
+    resources "/sessions", SessionController, only: [:new, :create, :delete],
+      singleton: true
   end
 
 end
