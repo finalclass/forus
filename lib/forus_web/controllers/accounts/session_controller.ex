@@ -3,6 +3,7 @@ defmodule ForusWeb.Accounts.SessionController do
 
   alias Forus.Accounts
   alias Forus.Accounts.User
+  alias ForusWeb.Auth
 
   def new(conn, _params) do
     changeset = Accounts.change_user(%User{})
@@ -14,8 +15,7 @@ defmodule ForusWeb.Accounts.SessionController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Welcome back!")
-        |> put_session(:user_id, user.id)
-        |> configure_session(renew: true)
+        |> Auth.login(user.id)
         |> redirect(to: "/")
       {:error, :unauthorized} ->
         conn
@@ -27,5 +27,6 @@ defmodule ForusWeb.Accounts.SessionController do
 
   def delete(conn, _params) do
     conn
+    |> Auth.logout()
   end
 end
