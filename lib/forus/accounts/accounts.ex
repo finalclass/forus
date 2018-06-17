@@ -11,7 +11,6 @@ defmodule Forus.Accounts do
 
   def authenticate_by_email_password(email, password) do
     credential = get_credential_by_email(email)
-    IEx.pry
     case credential do
       nil -> {:error, :unauthorized}
       _ -> case PassHasher.encode(password) == credential.password do

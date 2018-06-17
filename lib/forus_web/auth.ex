@@ -12,17 +12,14 @@ defmodule ForusWeb.Auth do
   end
 
   def logout(conn) do
-    conn
+    Conn.configure_session(conn, drop: true)
   end
 
   def assign_current_user(conn, _) do
-    IEx.pry
-    conn = case Conn.get_session(conn, :user_id) do
-             nil -> conn
-             user_id -> Conn.assign(conn, :user, Accounts.get_user!(user_id))
-           end
-    IEx.pry
-    conn
+    case Conn.get_session(conn, :user_id) do
+      nil -> conn
+      user_id -> Conn.assign(conn, :user, Accounts.get_user!(user_id))
+    end
   end
 
 end

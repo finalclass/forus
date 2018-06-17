@@ -1,7 +1,7 @@
 defmodule ForusWeb.Router do
   use ForusWeb, :router
-
-  alias ForusWeb.Auth
+  
+  import ForusWeb.Auth, only: [assign_current_user: 2]
   
   pipeline :browser do
     plug :accepts, ["html"]
@@ -9,11 +9,11 @@ defmodule ForusWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-
+    plug :assign_current_user
   end
 
   scope "/", ForusWeb do
-    pipe_through [:browser, &Auth.assign_current_user/2]
+    pipe_through :browser
 
     get "/", HomeController, :index
   end

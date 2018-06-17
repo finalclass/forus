@@ -28,5 +28,6 @@ defmodule ForusWeb.Accounts.SessionController do
   def delete(conn, _params) do
     conn
     |> Auth.logout()
+    |> redirect to: accounts_session_path(conn, :new)
   end
 end

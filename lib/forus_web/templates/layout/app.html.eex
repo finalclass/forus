@@ -16,12 +16,22 @@
       <%= link gettext("Forus"), to: home_path(@conn, :index), class: "navbar-brand" %>
       <div class="col"></div>
       <ul class="nav justify-content-end nav-pills">
-        <li class="nav-item">
-          <%= link gettext("Register"), to: accounts_user_path(@conn, :new), class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link gettext("Login"), to: accounts_session_path(@conn, :new), class: "nav-link" %>
-        </li>
+        <%= case Map.get(@conn.assigns, :user) do %>
+          <%= nil ->  %>
+          <li class="nav-item">
+            <%= link gettext("Register"), to: accounts_user_path(@conn, :new), class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link gettext("Login"), to: accounts_session_path(@conn, :new), class: "nav-link" %>
+          </li>  
+          <%= user -> %>
+          <li>
+            <%= user.name %>
+          </li>
+          <li class="nav-item">
+            <%= link gettext("Logout"), to: accounts_session_path(@conn, :delete), method: :delete, class: "nav-link" %>
+          </li>
+        <% end %>
       </ul>
     </nav>
 
