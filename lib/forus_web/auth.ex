@@ -1,10 +1,9 @@
 require IEx
 
 defmodule ForusWeb.Auth do
-
   alias Plug.Conn
   alias Forus.Accounts
-  
+
   def login(conn, userId) do
     conn
     |> Conn.put_session(:user_id, userId)
@@ -21,5 +20,4 @@ defmodule ForusWeb.Auth do
       user_id -> Conn.assign(conn, :user, Accounts.get_user!(user_id))
     end
   end
-
 end
