@@ -7,7 +7,7 @@
 
   <%= forus_text_field f, :name %>
   
-  <%= inputs_for f, :credentials, fn cf -> %>
+  <%= inputs_for f, :credential, fn cf -> %>
     <%= forus_text_field cf, :email %>
     <%= forus_password_field cf, :password %>
   <% end %>

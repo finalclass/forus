@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-3">
+    <div class="nav flex-column nav-pills">
+      <%= link gettext("User Home"), to:  accounts_panel_path(@conn, :index), class: "nav-link" %>
+    </div>
+    <div class="nav-flex-column nav-pils">
+      <%= link gettext("Change password"), to: accounts_panel_path(@conn, :change_password_form), class: "nav-link" %>
+    </div>
+  </div>
+  <div class="col-9">
+    <%= render @view_module, @panel_template, assigns %>
+  </div>
+</div>
+
+

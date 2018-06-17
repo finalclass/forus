@@ -24,6 +24,10 @@ defmodule ForusWeb.Router do
     resources "/users", UserController
     resources "/sessions", SessionController, only: [:new, :create, :delete],
       singleton: true
+
+    get "/", PanelController, :index
+    get "/change-password", PanelController, :change_password_form
+    post "/change-password", PanelController, :change_password
   end
 
 end

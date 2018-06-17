@@ -6,7 +6,7 @@ defmodule Forus.Accounts.User do
 
   schema "users" do
     field :name, :string
-    has_many :credentials, Credential
+    has_one :credential, Credential
 
     timestamps()
   end

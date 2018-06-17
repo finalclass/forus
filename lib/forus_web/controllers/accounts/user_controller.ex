@@ -10,7 +10,7 @@ defmodule ForusWeb.Accounts.UserController do
   end
 
   def new(conn, _params) do
-    changeset = Accounts.change_user(%User{credentials: [%Credential{}]})
+    changeset = Accounts.change_user(%User{credential: [%Credential{}]})
     render(conn, "new.html", changeset: changeset)
   end
 
