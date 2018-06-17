@@ -4,9 +4,9 @@ defmodule Forus.Accounts.Credential do
   alias Forus.Accounts.User
 
   schema "credentials" do
-    field :email, :string
-    field :password, :string
-    belongs_to :user, User
+    field(:email, :string)
+    field(:password, :string)
+    belongs_to(:user, User)
 
     timestamps()
   end
@@ -18,5 +18,42 @@ defmodule Forus.Accounts.Credential do
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 5)
+  end
+
+  def update_password_changeset(credential, attrs) do
+    password = credential.password
+    credential = %{credential | password: nil}
+
+    cast(credential, attrs, ~w(password)a)
+    |> validate_required(~w(password)a)
+    |> validate_length(:password, min: 4)
+    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_password(:password, password)
+  end
+
+  def validate_password(changeset, field, current_password) do
+    error_param = "#{field}_current"
+    error_field = String.to_atom(error_param)
+
+    errors =
+      case Map.fetch(changeset.params, error_param) do
+        {:ok, new_password} ->
+          new_password_encrypted = PasswordHasher.encode(new_password)
+
+          case new_password_encrypted == current_password do
+            true -> []
+            _ -> [{error_field, {"is invalid", []}}]
+          end
+
+        :error ->
+          [{error_field, {"can't be blank", []}}]
+      end
+
+    %{
+      changeset
+      | validations: [{:password} | changeset.validations],
+        errors: errors ++ changeset.errors,
+        valid?: changeset.valid? and errors == []
+    }
   end
 end
