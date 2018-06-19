@@ -25,10 +25,19 @@ defmodule ForusWeb.Accounts.PanelController do
     user = conn.assigns.user
 
     case Accounts.change_user_password(user, credential_params) do
-      _user ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "Password changed.")
         |> redirect(to: accounts_panel_path(conn, :index))
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(
+          conn,
+          "layout.html",
+          panel_template: "change_password_form.html",
+          user: user,
+          changeset: changeset
+        )
     end
   end
 end

@@ -1,7 +1,9 @@
+require IEx
+
 defmodule Forus.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Forus.Accounts.User
+  alias Forus.Accounts.{User, Credential}
   alias Forus.Accounts.PasswordHasher
 
   schema "credentials" do
@@ -25,11 +27,13 @@ defmodule Forus.Accounts.Credential do
     password = credential.password
     credential = %{credential | password: nil}
 
-    cast(credential, attrs, ~w(password)a)
+    changeset = cast(credential, attrs, ~w(password)a)
+
+    changeset
     |> validate_required(~w(password)a)
     |> validate_length(:password, min: 4)
     |> validate_confirmation(:password, message: "does not match password")
-    |> validate_password(:password, password)
+    |> Credential.validate_password(:password, password)
   end
 
   def validate_password(changeset, field, current_password) do
