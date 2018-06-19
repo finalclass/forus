@@ -6,17 +6,21 @@ defmodule Forus.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Forus.Repo 
+  alias Forus.Repo
   alias Forus.Accounts.{User, Credential, PasswordHasher}
 
   def authenticate_by_email_password(email, password) do
     credential = get_credential_by_email(email)
+
     case credential do
-      nil -> {:error, :unauthorized}
-      _ -> case PasswordHasher.encode(password) == credential.password do
-             false -> {:error, :unauthorized}
-             true -> {:ok, credential.user}
-           end
+      nil ->
+        {:error, :unauthorized}
+
+      _ ->
+        case PasswordHasher.encode(password) == credential.password do
+          false -> {:error, :unauthorized}
+          true -> {:ok, credential.user}
+        end
     end
   end
 
@@ -24,7 +28,7 @@ defmodule Forus.Accounts do
     Repo.get_by(Credential, email: String.downcase(email))
     |> Repo.preload(:user)
   end
-  
+
   @doc """
   Returns the list of users.
 
@@ -60,7 +64,7 @@ defmodule Forus.Accounts do
     |> Repo.get!(id)
     |> Repo.preload(:credential)
   end
-  
+
   @doc """
   Creates a user.
 
@@ -79,7 +83,7 @@ defmodule Forus.Accounts do
     |> Repo.insert()
   end
 
-  def register_with_email_password(attrs \\ %{}) do
+  def create_user_with_credentials(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
     |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
@@ -87,18 +91,36 @@ defmodule Forus.Accounts do
     |> Repo.insert()
   end
 
+  def change_user_password(user, attrs) do
+    attrs = Map.put(attrs, "user_id", user.id)
+
+    user.credential
+    |> Credential.update_password_changeset(attrs)
+    |> hash_password_in_credential_changeset
+    |> Repo.update()
+  end
+
+  defp hash_password_in_credential_changeset(%Ecto.Changeset{} = changeset) do
+    password = Ecto.Changeset.get_field(changeset, :password)
+    Ecto.Changeset.put_change(changeset, :password, PasswordHasher.encode(password))
+  end
+
   defp hash_password_in_user_changeset(%Ecto.Changeset{} = changeset) do
     changes = changeset.changes
     credential_changeset = changes.credential
     current_password = Ecto.Changeset.get_field(changeset, :password, "")
 
-    new_credential = Ecto.Changeset.put_change(
-      credential_changeset, :password, PasswordHasher.encode(current_password)) 
-    
+    new_credential =
+      Ecto.Changeset.put_change(
+        credential_changeset,
+        :password,
+        PasswordHasher.encode(current_password)
+      )
+
     new_changes = %{changes | credential: new_credential}
     %{changeset | changes: new_changes}
   end
-  
+
   @doc """
   Updates a user.
 

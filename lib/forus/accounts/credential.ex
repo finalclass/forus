@@ -2,6 +2,7 @@ defmodule Forus.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
   alias Forus.Accounts.User
+  alias Forus.Accounts.PasswordHasher
 
   schema "credentials" do
     field(:email, :string)

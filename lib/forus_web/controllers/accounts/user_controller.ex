@@ -15,7 +15,7 @@ defmodule ForusWeb.Accounts.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    case Accounts.register(user_params) do
+    case Accounts.create_user_with_credentials(user_params) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User created successfully.")
