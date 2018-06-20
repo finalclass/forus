@@ -12,32 +12,24 @@
   </head>
 
   <body>
-    <nav class="d-flex align-items-start border-bottom mb-3">
-      <%= link gettext("Forus"), to: home_path(@conn, :index), class: "navbar-brand" %>
-      <div class="col"></div>
-      <ul class="nav justify-content-end nav-pills">
-        <%= case Map.get(assigns, :user) do %>
-          <% nil ->  %>
-          <li class="nav-item">
-            <%= link gettext("Register"), to: accounts_user_path(@conn, :new), class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link gettext("Login"), to: accounts_session_path(@conn, :new), class: "nav-link" %>
-          </li>  
-          <% user -> %>
-          <li>
-            <%=  %>
-            <%= link gettext("Logged as: %{user_name}", user_name: user.name), to: accounts_panel_path(@conn, :index), class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link gettext("Logout"), to: accounts_session_path(@conn, :delete), method: :delete, class: "nav-link" %>
-          </li>
-        <% end %>
-      </ul>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand"><h1 class="navbar-item title is-4">Forus</h1></div>
+      <div class="navbar-menu is-active">
+        <div class="navbar-end">
+          <%= case Map.get(assigns, :user) do %>
+            <% nil ->  %>
+              <%= link gettext("Register"), to: accounts_user_path(@conn, :new), class: "navbar-item" %>
+              <%= link gettext("Login"), to: accounts_session_path(@conn, :new), class: "navbar-item" %>
+            <% user -> %>
+              <%= link gettext("Logged as: %{user_name}", user_name: user.name), to: accounts_panel_path(@conn, :index), class: "navbar-item" %>
+              <%= link gettext("Logout"), to: accounts_session_path(@conn, :delete), method: :delete, class: "navbar-item" %>
+          <% end %>
+        </div>
+      </div>
     </nav>
 
-    <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    <p class="notification is-info"><%= get_flash(@conn, :info) %></p>
+    <p class="notification is-danger"><%= get_flash(@conn, :error) %></p>
 
     <main role="main">
       <%= render @view_module, @view_template, assigns %>

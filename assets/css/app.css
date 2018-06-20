@@ -3,4 +3,4 @@
     font-weight: 600;
 }
 
-.alert:empty { display: none; }
+.notification:empty { display: none; }

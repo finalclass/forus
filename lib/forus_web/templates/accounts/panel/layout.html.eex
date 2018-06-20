@@ -1,13 +1,23 @@
-<div class="row">
-  <div class="col-3">
-    <div class="nav flex-column nav-pills">
-      <%= link gettext("User Home"), to:  accounts_panel_path(@conn, :index), class: "nav-link" %>
-    </div>
-    <div class="nav-flex-column nav-pils">
-      <%= link gettext("Change password"), to: accounts_panel_path(@conn, :change_password_form), class: "nav-link" %>
-    </div>
-  </div>
-  <div class="col-9">
+<div class="columns">
+  <aside class="menu column is-one-fifth">
+    <p class="menu-label">
+      User Panel
+    </p>
+
+    <ul class="menu-list">
+      <li>
+        <%= link gettext("User Home"), 
+        to:  accounts_panel_path(@conn, :index), 
+        class: if @conn.request_path == accounts_panel_path(@conn, :index), do: 'is-active' %>
+      </li>
+      <li>
+        <%= link gettext("Change password"), 
+        to: accounts_panel_path(@conn, :change_password_form),
+        class: if @conn.request_path == accounts_panel_path(@conn, :change_password_form), do: 'is-active' %>
+      </li>
+    </ul>
+  </aside>
+  <div class="column">
     <%= render @view_module, @panel_template, assigns %>
   </div>
 </div>
